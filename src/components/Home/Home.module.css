@@ -1,0 +1,31 @@
+.wrapper {
+  padding: var(--spacing-12, 48px) 0;
+}
+
+.title {
+  text-align: center;
+
+  /* display-4xl/leading-none/semibold */
+  font-family: var(--display);
+  font-size: var(--font-4xl);
+  font-weight: 600;
+  line-height: var(--leading-none);
+  margin-bottom: var(--spacing-4);
+}
+.buttons {
+  display: flex;
+  justify-content: center;
+}
+.description {
+  text-align: center;
+
+  font-size: var(--font-lg);
+  line-height: var(--leading-8);
+  margin-bottom: var(--spacing-4);
+}
+
+.logout {
+  position: absolute;
+  top: 0.8rem;
+  right: 1rem;
+}
