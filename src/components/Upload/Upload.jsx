@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom"
 
 export default function Upload() {
   const {isAuthenticated} = useAuth()
+  console.log(isAuthenticated)
   const navigate = useNavigate()
   useEffect(() => {
     if (!isAuthenticated) {

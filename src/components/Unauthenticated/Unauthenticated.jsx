@@ -2,32 +2,36 @@ import * as React from "react";
 import s from "./Unauthenticated.module.css";
 import Button from "../Button/Button";
 import { useAuth } from "../../context/authContext";
+import { useNavigate } from "react-router-dom";
 
 function Unauthenticated() {
-  const { login, signup } = useAuth();
+  const { login } = useAuth();
 
   const [status, setStatus] = React.useState("idle");
   const [signUpErrors, setSignUpErrors] = React.useState(null);
   const [userEmail, setUserEmail] = React.useState("");
-  const [userName, setUserName] = React.useState("");
   const [userPassword, setUserPassword] = React.useState("");
-
+  const navigate = useNavigate();
   function handleSubmit(event) {
     event.preventDefault();
 
     // obtener datos del formulario
     const email = userEmail;
-    const username = userName;
     const password = userPassword;
     console.log("email", userEmail);
-    console.log("username", userName);
     console.log("password", userPassword);
     setStatus("loading");
 
     // login and register TODO
-    login(email, username, password)
-      .then(() => setStatus("success"))
-      .catch(() => setStatus("error"));
+    login(email, password)
+      .then(() => {
+        setStatus("success");
+        console.log("succesfull login")
+        navigate("/upload")
+      })
+      .catch((error) => setStatus(error));
+
+    
   }
 
   const isLoading = status === "loading";
@@ -48,18 +52,6 @@ function Unauthenticated() {
               placeholder="user@example.com"
               value={userEmail}
               onChange={(e) => setUserEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="username">Username</label>
-            <input
-              id="username"
-              type="username"
-              name="username"
-              placeholder="username"
-              value={userName}
-              onChange={(e) => setUserName(e.target.value)}
               required
             />
           </div>

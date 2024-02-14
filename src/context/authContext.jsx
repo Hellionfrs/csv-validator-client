@@ -1,4 +1,5 @@
 import React from "react";
+import { baseUrl } from "../constants";
 
 export const authContext = React.createContext({
   isAuthenticated: false,
@@ -8,21 +9,30 @@ export const authContext = React.createContext({
 export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = React.useState(false);
 
-  async function login(email, name, password) {
+  React.useEffect(() => {
+    const savedToken = window.localStorage.getItem("tokenKey");
+
+    if (savedToken) {
+      setIsAuthenticated(true);
+    }
+  }, []);
+  async function login(email, password) {
     const options = {
       method: "POST",
-      body: JSON.stringify({ email, name, password }),
+      body: JSON.stringify({ email, password }),
       headers: {
         "Content-Type": "application/json",
       },
     };
-
+    console.log(options);
     const response = await fetch(baseUrl + "/login", options);
-
+    console.log(response);
     if (response.ok) {
-      const { token } = await response.json(); // jwt
-      window.localStorage.setItem(tokenKey, token);
+      const { data } = await response.json(); // jwt
+      console.log(data.token)
+      window.localStorage.setItem("tokenKey", data.token);
       setIsAuthenticated(true);
+      console.log("SettingIsauthenticated to true")
     } else {
       const body = await response.json();
       const error =
