@@ -3,17 +3,21 @@ import { baseUrl } from "../constants";
 
 export const authContext = React.createContext({
   isAuthenticated: false,
+  isAdmin: false,
   login: () => {},
   logout: () => {},
 });
 export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = React.useState(false);
-
+  const [isAdmin, setIsAdmin] = React.useState(false);
   React.useEffect(() => {
     const savedToken = window.localStorage.getItem("tokenKey");
-
+    const savedAdminToken = window.localStorage.getItem("adminTokenKey");
     if (savedToken) {
       setIsAuthenticated(true);
+    }
+    if (savedAdminToken) {
+      setIsAdmin(true);
     }
   }, []);
   async function login(email, password) {
@@ -29,15 +33,20 @@ export function AuthProvider({ children }) {
     console.log(response);
     if (response.ok) {
       const { data } = await response.json(); // jwt
-      console.log(data.token)
+      console.log(data.token);
+      console.log(data.role)
+      if (data.role === "admin") {
+        window.localStorage.setItem("adminTokenKey", data.token);
+        setIsAdmin(true);
+      }
       window.localStorage.setItem("tokenKey", data.token);
       setIsAuthenticated(true);
-      console.log("SettingIsauthenticated to true")
+      console.log("SettingIsauthenticated to true");
     } else {
       const body = await response.json();
       const error =
         body.message instanceof Array ? body.errors.join(", ") : body.message;
-        console.log(error)
+      console.log(error);
       return Promise.reject(new Error(error));
     }
   }
@@ -56,6 +65,7 @@ export function AuthProvider({ children }) {
     if (response.ok) {
       const { token } = await response.json();
       window.localStorage.setItem("tokenKey", token);
+      // TODO if signup is admin (not possible but...)
       setIsAuthenticated(true);
       return;
     } else {
@@ -68,11 +78,15 @@ export function AuthProvider({ children }) {
 
   function logout() {
     window.localStorage.removeItem("tokenKey");
+    window.localStorage.removeItem("adminTokenKey");
     setIsAuthenticated(false);
+    setIsAdmin(false);
   }
 
   return (
-    <authContext.Provider value={{ isAuthenticated, login, signup, logout }}>
+    <authContext.Provider
+      value={{ isAuthenticated, isAdmin, login, signup, logout }}
+    >
       {children}
     </authContext.Provider>
   );

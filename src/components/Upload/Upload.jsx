@@ -5,8 +5,10 @@ import s from "./Upload.module.css";
 import Button from "../Button/Button";
 
 export default function Upload() {
-  const { isAuthenticated, logout } = useAuth();
+  // TODO check if user roles is admin
+  const { isAuthenticated, isAdmin, logout } = useAuth();
   console.log(isAuthenticated);
+  console.log(isAdmin)
   const navigate = useNavigate();
   useEffect(() => {
     if (!isAuthenticated) {
@@ -15,7 +17,12 @@ export default function Upload() {
   });
   return (
     <section>
-      <div className={s.header}>You are Authenticated sir!</div>
+      {isAdmin ? (
+        <div className={s.header}>You are Authenticated sir!</div>
+      ) : (
+        <div className={s.header}>You need Super powers to watch this</div>
+      )}
+
       <Button
         className={s.logout}
         size="sm"
