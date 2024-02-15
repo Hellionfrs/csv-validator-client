@@ -9,6 +9,58 @@
   margin-top: var(--spacing-4);
 }
 
+.wrapper {
+  display: flex;
+  max-width: var(--width-xs, 320px);
+  flex-direction: column;
+  gap: var(--spacing-2, 8px);
+  margin-inline: auto;
+}
+.csv-input {
+  margin-inline: auto;
+  width: 14rem;
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--rounded-md);
+  border: 1px solid var(--border);
+  background: var(--background);
+
+  color: var(--foreground);
+  font-size: var(--font-sm);
+  line-height: var(--leading-6);
+}
+.csv-input::file-selector-button {
+  border: 1px solid var(--border);
+  border-radius: .2em;
+  background-color: var(--secondary);
+  transition: 0.5s;
+  padding: 0.25rem;
+  margin-right: 0.5rem;
+}
+
+.csv-input::file-selector-button:hover {
+  background-color: var(--primary-hover);
+  border: 1px solid var(--border-strong);
+  color: white;
+  margin-right: 1rem;
+}
+
+.main-form {
+  display: flex;
+  padding: var(--spacing-4, 16px) var(--spacing-2, 8px);
+  flex-direction: column;
+  gap: var(--spacing-4, 16px);
+}
+.title {
+  text-align: center;
+
+  /* display-4xl/leading-none/semibold */
+  font-family: var(--display);
+  font-size: var(--font-2xl);
+  font-weight: 600;
+  line-height: var(--leading-none);
+  margin-top: var(--spacing-4);
+}
+
 .logout {
   position: absolute;
   top: 0.8rem;

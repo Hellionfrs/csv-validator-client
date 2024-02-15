@@ -8,11 +8,12 @@ export const authContext = React.createContext({
   logout: () => {},
 });
 export function AuthProvider({ children }) {
-  const [isAuthenticated, setIsAuthenticated] = React.useState(false);
-  const [isAdmin, setIsAdmin] = React.useState(false);
+  const [isAuthenticated, setIsAuthenticated] = React.useState(window.localStorage.getItem("tokenKey") || false);
+  const [isAdmin, setIsAdmin] = React.useState(window.localStorage.getItem("tokenKey") || false);
   React.useEffect(() => {
+    console.log("executing use Effect inside AuthProvider")
     const savedToken = window.localStorage.getItem("tokenKey");
-    const savedAdminToken = window.localStorage.getItem("adminTokenKey");
+    const savedAdminToken = window.localStorage.getItem("tokenKey");
     if (savedToken) {
       setIsAuthenticated(true);
     }

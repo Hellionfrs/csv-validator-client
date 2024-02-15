@@ -41,7 +41,7 @@ label {
   line-height: var(--leading-none);
 }
 
-input:not([type="radio"], [type="checkbox"]),
+input:not([type="radio"], [type="checkbox"], [type="file"]),
 select,
 textarea {
   width: 100%;
