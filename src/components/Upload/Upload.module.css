@@ -1,0 +1,16 @@
+.header {
+  text-align: center;
+
+  /* display-4xl/leading-none/semibold */
+  font-family: var(--display);
+  font-size: var(--font-4xl);
+  font-weight: 600;
+  line-height: var(--leading-none);
+  margin-top: var(--spacing-4);
+}
+
+.logout {
+  position: absolute;
+  top: 0.8rem;
+  right: 1rem;
+}

@@ -36,7 +36,8 @@ export function AuthProvider({ children }) {
     } else {
       const body = await response.json();
       const error =
-        body.errors instanceof Array ? body.errors.join(", ") : body.errors;
+        body.message instanceof Array ? body.errors.join(", ") : body.message;
+        console.log(error)
       return Promise.reject(new Error(error));
     }
   }
@@ -54,7 +55,7 @@ export function AuthProvider({ children }) {
 
     if (response.ok) {
       const { token } = await response.json();
-      window.localStorage.setItem(tokenKey, token);
+      window.localStorage.setItem("tokenKey", token);
       setIsAuthenticated(true);
       return;
     } else {
@@ -66,7 +67,7 @@ export function AuthProvider({ children }) {
   }
 
   function logout() {
-    window.localStorage.removeItem(tokenKey);
+    window.localStorage.removeItem("tokenKey");
     setIsAuthenticated(false);
   }
 

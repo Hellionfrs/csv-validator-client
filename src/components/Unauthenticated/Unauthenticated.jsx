@@ -26,12 +26,14 @@ function Unauthenticated() {
     login(email, password)
       .then(() => {
         setStatus("success");
-        console.log("succesfull login")
-        navigate("/upload")
+        console.log("succesfull login");
+        navigate("/upload");
       })
-      .catch((error) => setStatus(error));
-
-    
+      .catch((error) => {
+        console.log(error)
+        setStatus("error");
+        setSignUpErrors(error.message)
+      });
   }
 
   const isLoading = status === "loading";
