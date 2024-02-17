@@ -4,14 +4,13 @@ import { useNavigate } from "react-router-dom";
 import s from "./Upload.module.css";
 import Button from "../Button/Button";
 import { csvFiletoArray, sendForm } from "../../utils/csvParser";
+import Input from "../Input";
 
 export default function Upload() {
   // TODO check if user roles is admin
   const { isAuthenticated, isAdmin, logout } = useAuth();
-  const [dataValidated, setDataValidadted] = useState({
-    success: [],
-    errors: [],
-  });
+  const [dataValidated, setDataValidated] = useState();
+  const [dataWasValidated, setDataWasValidated] = useState(false);
   const [file, setFile] = useState();
   const [array, setArray] = useState([]);
   const navigate = useNavigate();
@@ -37,9 +36,14 @@ export default function Upload() {
           .then((data) => {
             console.log("succesful send the data");
             console.log("data filtered", data);
-            setDataValidadted(data.data);
+            if (data.message) {
+              throw new Error("usuario ya existe");
+            }
+            setDataValidated(data.data);
+            setDataWasValidated(true);
           })
           .catch((error) => {
+            setDataWasValidated(false);
             console.log("something went wrong sending the data", error);
           });
       };
@@ -53,7 +57,7 @@ export default function Upload() {
     if (!isAuthenticated) {
       navigate("/login");
     }
-  });
+  }, []);
   return (
     <section>
       {isAdmin ? (
@@ -80,43 +84,36 @@ export default function Upload() {
               </form>
             </div>
           </header>
-          <article>
-            <header>Succesful!</header>
-            <table>
-              <thead>
-                <tr key={"header"}>
+          {dataWasValidated ? (
+            <div>
+              <article className={s["fields-wrapper"]}>
+                <header className={s["error-header"]}>
+                  Fix these fields first!
+                </header>
+                <div className={s["fields-name-column"]}>
+                  <span key="row">Rows</span>
                   {headerKeys.map((key) => (
-                    <th>{key}</th>
+                    <span key={key}>{key}</span>
                   ))}
-                </tr>
-              </thead>
-
-              <tbody>
-                {dataValidated.success ? (
-                  dataValidated.success.map((item) => (
-                    <tr key={item.id}>
-                      {Object.values(item).map((val) => (
-                        <td>{val}</td>
-                      ))}
-                    </tr>
-                  ))
-                ) : (
-                  <div>Nothing succesful</div>
-                )}
-              </tbody>
-            </table>
-          </article>
-          <article>
-            <header>To modify!</header>
-            {dataValidated.errors.map((item) => (
-              <div key={item.row}>
-                <div>{item.row}</div>
-                {Object.values(item.details).map((fields, index) => (
-                  <span key={index}>{fields}</span>
+                </div>
+              </article>
+              <article className={s["fields-wrapper"]}>
+                <header></header>
+                {dataValidated.errors.map((item) => (
+                  <div className={s["fields-name"]} key={item.row}>
+                    <Input
+                      row={item.row}
+                      id={`${item.row}-${item.original.email}`}
+                      fieldErrors={item.details}
+                      fields={item.original}
+                    />
+                  </div>
                 ))}
-              </div>
-            ))}
-          </article>
+              </article>
+            </div>
+          ) : (
+            <div className={s.header}>Upload your csv!</div>
+          )}
         </>
       ) : (
         <div className={s.header}>You need Super powers to watch this</div>

@@ -1,0 +1,22 @@
+.red {
+  outline: 1px solid var(--red-400);
+}
+
+.summit-row {
+  position: absolute;
+  top: 2px;
+  right: -5.5rem;
+}
+
+.input-form {
+  display: flex;
+  justify-content: space-around;
+  position: relative;
+  align-items: center;
+  gap: 2rem
+}
+
+.row {
+  margin-left: 2rem;
+  width: 145px;
+}
